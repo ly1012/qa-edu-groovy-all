@@ -1,0 +1,36 @@
+package com.liyun.qa.edu.jenkins_script.pipeline.pipeline
+
+//http://localhost:8080/job/liyun-private/job/yun-tech-note/
+
+pipeline {
+    agent { label "aliyun_ecs_47"}
+
+    //当前使用 PATH 变量解决命令路径问题
+//   tools {
+//       //使用全局工具配置中 Git 配置中名为 unix_git 的配置
+//       git "unix_git"
+//   }
+
+    // options {
+    //     timeout(time: 1, unit: 'MINUTES')
+    //     retry(0)
+    // }
+
+    stages {
+        stage('Build') {
+            steps {
+                cleanWs()
+                // Get some code from a GitHub repository
+                git 'git@github.com:ly1012/doc-notes.git'
+                sh returnStdout: true, script: 'python siderbar.py'
+            }
+        }
+
+        stage('Deloy'){
+            steps {
+                sh returnStdout: true, script: 'rm -rf /home/wwwroot/tech-note/* && cp -ruf * /home/wwwroot/tech-note'
+            }
+        }
+
+    }
+}

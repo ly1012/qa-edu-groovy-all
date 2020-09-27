@@ -1,0 +1,6 @@
+.gradle
+.idea
+build
+
+
+src/main/groovy/com/liyun/qa/edu/groovy/sensitive

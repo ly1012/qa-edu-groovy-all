@@ -1,0 +1,5 @@
+rootProject.name = 'qa-edu-groovy-all'
+include 'groovy'
+include 'algorithms'
+include 'jenkins-script'
+

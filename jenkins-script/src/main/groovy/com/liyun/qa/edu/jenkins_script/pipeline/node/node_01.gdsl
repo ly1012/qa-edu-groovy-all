@@ -1,0 +1,29 @@
+package com.liyun.qa.edu.jenkins_script.pipeline.node
+
+//http://localhost:8080/job/liyun-private/job/yun-backup-aliyun-ecs/
+
+// aliyun_ecs_47 为节点名称
+node("aliyun_ecs_47") {
+
+    stage('打包备份文件') {
+        sh returnStdout: true, script: 'cd /home/liyun/backup && rm -rf /home/liyun/backup/* && tar jcvf conf.tar.bz2 /usr/local/nginx/conf/ && tar jcvf wwwroot.tar.bz2 /home/wwwroot'
+    }
+
+}
+
+// master 为节点名称
+node('master') {
+
+    def remote = [:]
+    remote.name = 'aliyun'
+    remote.host = '47.90.100.47'
+    remote.user = 'root'
+    remote.password = 'xxxxxxxxxx'
+    remote.allowAnyHosts = true
+
+    stage('下载备份文件'){
+        sshGet remote: remote, from: '/home/liyun/backup/conf.tar.bz2', into: 'e:\\download', override: true
+        sshGet remote: remote, from: '/home/liyun/backup/wwwroot.tar.bz2', into: 'e:\\download', override: true
+    }
+
+}
